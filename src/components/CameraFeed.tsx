@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -5,14 +6,15 @@ import { Camera, Users, MapPin } from "lucide-react";
 
 interface CameraFeedProps {
   isRecording: boolean;
-  onDataUpdate: (data: any[]) => void;
+  onDataUpdate: (updateFn: (prev: any[]) => any[]) => void;
 }
 
 const CameraFeed = ({ isRecording, onDataUpdate }: CameraFeedProps) => {
   const [currentDetection, setCurrentDetection] = useState(null);
   const [detectionCount, setDetectionCount] = useState(0);
 
-  const emotions = ["Happy", "Neutral", "Surprised", "Sad", "Angry"];
+  // Extended emotion categories including all facial expressions
+  const emotions = ["Happy", "Sad", "Angry", "Surprised", "Fear", "Disgust", "Neutral", "Sadness"];
   const locations = ["Entry Door", "Exit Door", "Checkout Area"];
 
   useEffect(() => {
@@ -44,10 +46,13 @@ const CameraFeed = ({ isRecording, onDataUpdate }: CameraFeedProps) => {
   const getEmotionColor = (emotion: string) => {
     const colors = {
       "Happy": "bg-green-500",
-      "Neutral": "bg-gray-500",
-      "Surprised": "bg-yellow-500",
       "Sad": "bg-blue-500",
-      "Angry": "bg-red-500"
+      "Sadness": "bg-blue-600",
+      "Angry": "bg-red-500",
+      "Surprised": "bg-yellow-500",
+      "Fear": "bg-purple-500",
+      "Disgust": "bg-orange-500",
+      "Neutral": "bg-gray-500"
     };
     return colors[emotion] || "bg-gray-500";
   };
@@ -55,10 +60,13 @@ const CameraFeed = ({ isRecording, onDataUpdate }: CameraFeedProps) => {
   const getEmotionEmoji = (emotion: string) => {
     const emojis = {
       "Happy": "😊",
-      "Neutral": "😐",
-      "Surprised": "😲",
       "Sad": "😢",
-      "Angry": "😠"
+      "Sadness": "😔",
+      "Angry": "😠",
+      "Surprised": "😲",
+      "Fear": "😨",
+      "Disgust": "🤢",
+      "Neutral": "😐"
     };
     return emojis[emotion] || "😐";
   };

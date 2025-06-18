@@ -16,11 +16,13 @@ const DataTable = ({ data }: DataTableProps) => {
 
   // Generate some sample data if none provided
   const sampleData = data.length > 0 ? data : [
-    { id: 1, timestamp: "10:15:32", emotion: "Happy", location: "Entry Door", confidence: 85 },
-    { id: 2, timestamp: "10:18:45", emotion: "Neutral", location: "Checkout Area", confidence: 72 },
-    { id: 3, timestamp: "10:22:10", emotion: "Surprised", location: "Exit Door", confidence: 68 },
-    { id: 4, timestamp: "10:25:33", emotion: "Happy", location: "Entry Door", confidence: 91 },
-    { id: 5, timestamp: "10:28:22", emotion: "Sad", location: "Checkout Area", confidence: 76 },
+    { id: 1, timestamp: "10:15:32", emotion: "Happy", location: "Entry Door", confidence: 85, source: "live" },
+    { id: 2, timestamp: "10:18:45", emotion: "Neutral", location: "Checkout Area", confidence: 72, source: "live" },
+    { id: 3, timestamp: "10:22:10", emotion: "Surprised", location: "Exit Door", confidence: 68, source: "live" },
+    { id: 4, timestamp: "10:25:33", emotion: "Fear", location: "Entry Door", confidence: 91, source: "live" },
+    { id: 5, timestamp: "10:28:22", emotion: "Disgust", location: "Checkout Area", confidence: 76, source: "live" },
+    { id: 6, timestamp: "10:30:15", emotion: "Angry", location: "Exit Door", confidence: 82, source: "upload" },
+    { id: 7, timestamp: "10:32:40", emotion: "Sadness", location: "Photo Upload", confidence: 88, source: "upload" },
   ];
 
   const filteredData = sampleData.filter(row => {
@@ -36,7 +38,10 @@ const DataTable = ({ data }: DataTableProps) => {
       "Neutral": "bg-gray-100 text-gray-800",
       "Surprised": "bg-yellow-100 text-yellow-800",
       "Sad": "bg-blue-100 text-blue-800",
-      "Angry": "bg-red-100 text-red-800"
+      "Sadness": "bg-blue-200 text-blue-900",
+      "Angry": "bg-red-100 text-red-800",
+      "Fear": "bg-purple-100 text-purple-800",
+      "Disgust": "bg-orange-100 text-orange-800"
     };
     return colors[emotion] || "bg-gray-100 text-gray-800";
   };
@@ -63,10 +68,13 @@ const DataTable = ({ data }: DataTableProps) => {
             >
               <option value="all">All Emotions</option>
               <option value="Happy">Happy</option>
-              <option value="Neutral">Neutral</option>
-              <option value="Surprised">Surprised</option>
               <option value="Sad">Sad</option>
+              <option value="Sadness">Sadness</option>
               <option value="Angry">Angry</option>
+              <option value="Surprised">Surprised</option>
+              <option value="Fear">Fear</option>
+              <option value="Disgust">Disgust</option>
+              <option value="Neutral">Neutral</option>
             </select>
           </div>
         </div>
@@ -80,6 +88,7 @@ const DataTable = ({ data }: DataTableProps) => {
                 <th className="text-left py-3 px-4 font-medium">Location</th>
                 <th className="text-left py-3 px-4 font-medium">Expression</th>
                 <th className="text-left py-3 px-4 font-medium">Confidence</th>
+                <th className="text-left py-3 px-4 font-medium">Source</th>
               </tr>
             </thead>
             <tbody>
@@ -102,6 +111,11 @@ const DataTable = ({ data }: DataTableProps) => {
                       </div>
                       <span className="text-sm text-muted-foreground">{row.confidence}%</span>
                     </div>
+                  </td>
+                  <td className="py-3 px-4">
+                    <Badge variant={row.source === 'live' ? 'default' : 'secondary'}>
+                      {row.source === 'live' ? 'Live Feed' : 'Upload'}
+                    </Badge>
                   </td>
                 </tr>
               ))}
