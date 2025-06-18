@@ -8,6 +8,7 @@ import CameraFeed from "@/components/CameraFeed";
 import EmotionChart from "@/components/EmotionChart";
 import DataTable from "@/components/DataTable";
 import StatsCards from "@/components/StatsCards";
+import PhotoUpload from "@/components/PhotoUpload";
 import { Download, Play, Pause, Settings } from "lucide-react";
 import { toast } from "sonner";
 
@@ -25,8 +26,8 @@ const Index = () => {
   const exportData = () => {
     // Simulate CSV export
     const csvContent = "data:text/csv;charset=utf-8," + 
-      "Timestamp,Location,Expression,Confidence\n" +
-      data.map(row => `${row.timestamp},${row.location},${row.expression},${row.confidence}`).join("\n");
+      "Timestamp,Location,Expression,Confidence,Source\n" +
+      data.map(row => `${row.timestamp},${row.location},${row.expression || row.emotion},${row.confidence},${row.source || 'live'}`).join("\n");
     
     const link = document.createElement("a");
     link.setAttribute("href", encodeURI(csvContent));
@@ -36,6 +37,10 @@ const Index = () => {
     toast("Data exported successfully", {
       description: "CSV file downloaded to your device"
     });
+  };
+
+  const handlePhotoAnalyzed = (photoData: any) => {
+    setData(prev => [...prev, photoData]);
   };
 
   return (
@@ -82,8 +87,9 @@ const Index = () => {
 
         {/* Main Content */}
         <Tabs defaultValue="live" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4">
+          <TabsList className="grid w-full grid-cols-5">
             <TabsTrigger value="live">Live Monitoring</TabsTrigger>
+            <TabsTrigger value="upload">Photo Upload</TabsTrigger>
             <TabsTrigger value="analytics">Analytics</TabsTrigger>
             <TabsTrigger value="data">Data Records</TabsTrigger>
             <TabsTrigger value="settings">Configuration</TabsTrigger>
@@ -94,6 +100,10 @@ const Index = () => {
               <CameraFeed isRecording={isRecording} onDataUpdate={setData} />
               <EmotionChart isRecording={isRecording} />
             </div>
+          </TabsContent>
+
+          <TabsContent value="upload" className="space-y-6">
+            <PhotoUpload onPhotoAnalyzed={handlePhotoAnalyzed} />
           </TabsContent>
 
           <TabsContent value="analytics" className="space-y-6">

@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -36,7 +35,7 @@ const CameraFeed = ({ isRecording, onDataUpdate }: CameraFeedProps) => {
       setDetectionCount(prev => prev + 1);
       
       // Update parent component with new data
-      onDataUpdate(prev => [...prev.slice(-99), detection]); // Keep last 100 records
+      onDataUpdate(prev => [...(prev || []).slice(-99), detection]); // Keep last 100 records
     }, 2000 + Math.random() * 3000); // Random interval 2-5 seconds
 
     return () => clearInterval(interval);
