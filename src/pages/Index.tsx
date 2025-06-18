@@ -43,6 +43,11 @@ const Index = () => {
     setData(prev => [...prev, photoData]);
   };
 
+  // Fix the callback to properly handle the function signature
+  const handleDataUpdate = (updateFn: (prev: any[]) => any[]) => {
+    setData(updateFn);
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-green-50 p-6">
       <div className="max-w-7xl mx-auto space-y-6">
@@ -97,7 +102,7 @@ const Index = () => {
 
           <TabsContent value="live" className="space-y-6">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <CameraFeed isRecording={isRecording} onDataUpdate={setData} />
+              <CameraFeed isRecording={isRecording} onDataUpdate={handleDataUpdate} />
               <EmotionChart isRecording={isRecording} />
             </div>
           </TabsContent>
